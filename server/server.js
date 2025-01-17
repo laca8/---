@@ -14,7 +14,7 @@ const ApiError = require("./utils/apiError");
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ origin: "*", credentials: true }));
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 connDb();
 app.use("/api/report", reportRoute);
 app.use("/api/sugg", suggRoute);
