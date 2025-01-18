@@ -45,7 +45,18 @@ app.use("*", (req, res, next) => {
   next(new ApiError("this route not found", 404));
 });
 app.use(globalError);
-
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`server running at port ${PORT}...`);
