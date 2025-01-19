@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "server": "node server",
+    "server": "nodemon server",
     "build": "npm install",
     "client": "npm run dev --prefix  clients",
     "dev": "concurrently \"npm run server \" \"npm run client\""

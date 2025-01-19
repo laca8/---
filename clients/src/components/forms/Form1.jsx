@@ -34,20 +34,20 @@ const Form1 = () => {
   const connectorData = JSON.parse(localStorage.getItem("connector"));
   useEffect(() => {
     setNameUser(user?.data?.username);
-    if (connectorData) {
-      setConnAge(connectorData?.connAge);
-      setConnName(connectorData?.connName);
-      setConnPhone(connectorData?.connPhone);
-      setConnCity(connectorData?.connCity);
-      setConnPlace(connectorData?.connPlace);
-      setConnShiek(connectorData?.connShiek);
-      setConnId(connectorData?.connId);
-      setConnType(connectorData?.connType);
-      setConnJop(connectorData?.connJop);
-      setConnRelation(connectorData?.connRelation);
-      setSide(connectorData?.side);
-      setCommunicationReport(connectorData?.communicationReport);
-    }
+    // if (connectorData) {
+    //   setConnAge(connectorData?.connAge);
+    //   setConnName(connectorData?.connName);
+    //   setConnPhone(connectorData?.connPhone);
+    //   setConnCity(connectorData?.connCity);
+    //   setConnPlace(connectorData?.connPlace);
+    //   setConnShiek(connectorData?.connShiek);
+    //   setConnId(connectorData?.connId);
+    //   setConnType(connectorData?.connType);
+    //   setConnJop(connectorData?.connJop);
+    //   setConnRelation(connectorData?.connRelation);
+    //   setSide(connectorData?.side);
+    //   setCommunicationReport(connectorData?.communicationReport);
+    // }
   }, [user]);
   const handleSubmitReport = () => {
     const connector = {

@@ -95,13 +95,42 @@ const getReport = asyncHandler(async (req, res, next) => {
   res.json({ msg: "success", data: report });
 });
 const getReports = asyncHandler(async (req, res) => {
-  if (req.query) {
-    var mongooseQuery = Report.find(req.query);
-  }
-  //console.log(req.query);
+  // console.log("laca");
 
-  //execute query
-  const reports = await mongooseQuery;
+  // console.log(req.query);
+
+  const k1 = req.query.numReport
+    ? {
+        numReport: Number(req.query.numReport),
+      }
+    : {};
+
+  const k2 = req.query.connName
+    ? {
+        connName: {
+          $regex: req.query.connName,
+          $options: "i",
+        },
+      }
+    : {};
+  const k3 = req.query.connPhone
+    ? {
+        connPhone: {
+          $regex: req.query.connPhone,
+          $options: "i",
+        },
+      }
+    : {};
+  const k4 = req.query.name
+    ? {
+        name: {
+          $regex: req.query.name,
+          $options: "i",
+        },
+      }
+    : {};
+
+  const reports = await Report.find({ ...k1, ...k2, ...k3, ...k4 });
 
   res.status(200).json({
     msg: "success",

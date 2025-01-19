@@ -115,7 +115,7 @@ const ReportForm = () => {
       setNotify(toast.error(error));
     }
   }, [error]);
-  const API_URL = "http://localhost:5000/api";
+  const API_URL = "/api";
 
   useEffect(() => {
     const fetchData1 = async () => {
@@ -156,7 +156,7 @@ const ReportForm = () => {
     fetchData7();
   }, []);
 
-  const API_URI = "http://localhost:5000/api/city";
+  const API_URI = "/api/city";
   const [data, setData] = useState([]);
 
   useEffect(() => {

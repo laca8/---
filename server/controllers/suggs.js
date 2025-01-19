@@ -65,12 +65,39 @@ const getSuggestion = asyncHandler(async (req, res, next) => {
   res.json({ msg: "success", data: suggestion });
 });
 const getSuggestions = asyncHandler(async (req, res) => {
-  if (req.query) {
-    var mongooseQuery = Suggestion.find(req.query);
-  }
-  console.log(req.query);
-  //execute query
-  const suggestions = await mongooseQuery;
+  // console.log(req.query);
+
+  const k1 = req.query.numSugg
+    ? {
+        numSugg: Number(req.query.numSugg),
+      }
+    : {};
+
+  const k2 = req.query.connName
+    ? {
+        connName: {
+          $regex: req.query.connName,
+          $options: "i",
+        },
+      }
+    : {};
+  const k3 = req.query.connPhone
+    ? {
+        connPhone: {
+          $regex: req.query.connPhone,
+          $options: "i",
+        },
+      }
+    : {};
+  const k4 = req.query.side
+    ? {
+        side: {
+          $regex: req.query.side,
+          $options: "i",
+        },
+      }
+    : {};
+  const suggestions = await Suggestion.find({ ...k1, ...k2, ...k3, ...k4 });
   res.status(200).json({
     msg: "success",
     results: suggestions.length,
