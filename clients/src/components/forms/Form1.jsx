@@ -51,7 +51,6 @@ const Form1 = () => {
   }, [user]);
   const handleSubmitReport = () => {
     const connector = {
-      side,
       nameUser,
       communicationReport,
       connName,
@@ -67,21 +66,19 @@ const Form1 = () => {
     };
 
     if (
-      (nameUser != "") &
-      (connName != "") &
-      (connCity != "") &
-      (side != "") &
-      (communicationReport != "") &
-      (connPlace != "") &
-      (connShiek != "") &
-      (connPhone != "") &
-      (connId != "")
+      nameUser == "" ||
+      connPlace == "" ||
+      connCity == "" ||
+      connName == "" ||
+      connShiek == "" ||
+      connPhone == "" ||
+      communicationReport == ""
     ) {
+      setNotify(toast.error("  استكمال جميع البيانات"));
+    } else {
       localStorage.setItem("connector", JSON.stringify(connector));
       console.log(connector);
       navigator("/report");
-    } else {
-      setNotify(toast.error("  استكمال جميع البيانات"));
     }
   };
   const handleSubmitSuggestion = () => {
@@ -104,7 +101,6 @@ const Form1 = () => {
       (nameUser != "") &
       (connName != "") &
       (connCity != "") &
-      (side != "") &
       (connPhone != "") &
       (communicationReport != "") &
       (connPlace != "") &
@@ -114,7 +110,7 @@ const Form1 = () => {
       console.log(connector);
       navigator("/suggestion");
     } else {
-      setNotify(toast.error("  استكمال جميع البيانات"));
+      setNotify(toast.error("استكمال جميع البيانات"));
     }
   };
   const [data, setData] = useState([]);
@@ -180,7 +176,7 @@ const Form1 = () => {
               <option>أخرى</option>
             </select>
           </div>
-          <div className="flex flex-col  w-auto p-1">
+          {/* <div className="flex flex-col  w-auto p-1">
             <label>
               جهة البلاغ <span className="text-red-700">*</span>
             </label>
@@ -198,7 +194,7 @@ const Form1 = () => {
                 <option key={i}>{x}</option>
               ))}
             </select>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -336,7 +332,7 @@ const Form1 = () => {
           </div>
 
           <div className="flex flex-col w-auto p-1 ">
-            <label>درجة القرابة</label>
+            <label>درجة الصلة</label>
             <input
               className="bg-gray-800 p-1 rounded-sm border-2 border-gray-400"
               value={connRelation}

@@ -192,9 +192,14 @@ const UpdateReport = ({ id }) => {
         ) : (
           <>
             <div ref={contentRef}>
-              <div className="flex flex-row justify-between mt-2 p-2 bg-gray-400 rounded-sm font-bold text-xl">
+              <div className="flex flex-row justify-between mt-2 p-2 bg-gray-100 text-black shadow-lg rounded-sm font-bold text-xl">
                 <p>رقم البلاغ: {report?.data?.numReport}</p>
-                <p>التاريخ :{report?.data?.createdAt}</p>
+                <p>
+                  التاريخ :
+                  {report?.data?.createdAt
+                    .replace(/T/, " ")
+                    .replace(/\..+/, "")}
+                </p>
                 {report?.data?.imp ? (
                   <p>
                     تم تنفيذ البلاغ{" "}
@@ -543,13 +548,13 @@ const UpdateReport = ({ id }) => {
               <button
                 className="bg-green-800 p-1 rounded-sm text-white"
                 onClick={() => clickToNotes(id)}>
-                ملاحظات
+                متابعات
               </button>
-              <button
+              {/* <button
                 className="bg-blue-950 p-1 rounded-sm text-white"
                 onClick={() => handleUpdate()}>
                 تعديل{" "}
-              </button>
+              </button> */}
 
               <button
                 className="bg-yellow-700 p-1 rounded-sm text-white"
@@ -558,7 +563,7 @@ const UpdateReport = ({ id }) => {
               </button>
 
               <button
-                className={`bg-gray-800 p-1 rounded-sm text-black   ${
+                className={`bg-red-800 shadow-lg p-1 rounded-sm text-white   ${
                   report?.data?.imp && "bg-gray-800"
                 } `}
                 disabled={report?.data?.imp}

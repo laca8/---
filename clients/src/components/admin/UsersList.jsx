@@ -50,6 +50,12 @@ const UsersList = () => {
                 <th scope="col" className="px-6 py-3">
                   is_Admin
                 </th>
+                <th scope="col" className="px-6 py-3">
+                  نوع التحكم
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  التحكم
+                </th>
                 <th scope="col" className="px-6 py-3 text-xl">
                   #
                 </th>
@@ -73,6 +79,12 @@ const UsersList = () => {
                         X
                       </p>
                     )}
+                  </td>
+                  <td className="p-2 w-auto font-semibold">
+                    {x?.permission?.first}
+                  </td>
+                  <td className="p-2 w-auto font-semibold">
+                    {x?.permission?.second}
                   </td>
                   <td className="p-2 w-auto">
                     <button

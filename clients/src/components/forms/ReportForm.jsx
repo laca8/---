@@ -20,7 +20,7 @@ const ReportForm = () => {
   const [type, setType] = useState("");
 
   const [id, setId] = useState("");
-  const [dis, setDis] = useState("");
+  const [dis, setDis] = useState(localStorage.getItem("dis"));
   const [reason, setReason] = useState("");
   const [order, setOrder] = useState("");
   const [age, setAge] = useState("");
@@ -81,14 +81,7 @@ const ReportForm = () => {
     };
     // console.log(disabl);
     try {
-      if (
-        (name != "") &
-        (city != "") &
-        (place != "") &
-        (shiek != "") &
-        (phone != "") &
-        (id != "")
-      ) {
+      if ((city != "") & (place != "") & (shiek != "")) {
         //dispatch(addReport(disabl))
         const res = await axios.post(`${URL_REPORT}`, disabl);
         //setLoad(true)
@@ -207,13 +200,12 @@ const ReportForm = () => {
             <label>
               نوع الاعاقة<span className="text-red-700">*</span>
             </label>
-            <select
-              defaultValue={"اختر نوع الاعاقة"}
+            {/* <select
               id="countries"
               className="bg-gray-800 p-1 rounded-sm w-full border-2 border-gray-400"
               value={dis}
               onChange={(e) => setDis(e.target.value)}>
-              <option value="" selected disabled hidden>
+              <option value="" selected disabled>
                 اختر
               </option>
 
@@ -222,7 +214,14 @@ const ReportForm = () => {
               ) : (
                 <p>loading...</p>
               )}
-            </select>
+            </select> */}
+            <input
+              className="bg-gray-800 p-1 rounded-sm border-2 border-gray-400"
+              value={dis}
+              onChange={(e) => setDis(e.target.value)}
+              type="text"
+              placeholder="ادخل نوع الاعاقة"
+            />
           </div>
           <div className="flex flex-col w-auto  p-1">
             <label>سبب الاعاقة</label>
@@ -383,6 +382,7 @@ const ReportForm = () => {
               id="countries"
               className="bg-gray-800 p-1 rounded-sm w-full border-2 border-gray-400"
               value={eduLevel}
+              disabled={eduStatus == "لم يلتحق"}
               onChange={(e) => setEduLevel(e.target.value)}>
               <option value="" selected disabled hidden>
                 اختر
@@ -495,8 +495,8 @@ const ReportForm = () => {
               <option>معاش</option>
               <option>تكافل</option>
               <option>كرامة</option>
-              <option>اعادات حكومية</option>
-              <option>اعادات اهلية</option>
+              <option>اعانات حكومية</option>
+              <option>اعانات اهلية</option>
               <option>اخري</option>
             </select>
           </div>

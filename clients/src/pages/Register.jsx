@@ -9,13 +9,18 @@ const Register = () => {
   const navigator = useNavigate();
   const dispatch = useDispatch();
   const [notify, setNotify] = useState("");
+  const [city, setCity] = useState("");
+  const [place, setPlace] = useState("");
+
   const userDetails = useSelector((state) => state.users);
   const { error, user, loading, success } = userDetails;
-
+  const [permission, setPermission] = useState({ first: "", second: "" });
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const API_URI = "/api/user/register";
   const handleSubmit = async () => {
+    console.log(permission);
+
     let config = {
       headers: {
         "Content-Type": "application/json",
@@ -34,8 +39,11 @@ const Register = () => {
           "الرجاء ادخال  كلمة سر  تحتوي علي 6 احراف او 6 ارقام علي الاقل"
         );
       }
-      const res = await axios.post(API_URI, { username, password }, config);
-      console.log(res);
+      const res = await axios.post(
+        API_URI,
+        { username, password, permission },
+        config
+      );
 
       if (res?.data?.data) {
         setNotify(toast.success("تم اضافة حساب جديد"));
@@ -47,14 +55,34 @@ const Register = () => {
       setNotify(toast.error(error));
     }
   };
+  const handlePermissionChange = (e) => {
+    setPermission({
+      ...permission,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   useEffect(() => {
     if (error) {
       setNotify(toast.error(error));
     }
   }, [error]);
+  const API_URI_CITY = "/api/city";
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(API_URI_CITY);
+        setData(res?.data?.data);
+      } catch (error) {
+        setNotify(toast.error(error));
+      }
+    };
+    fetchData();
+  }, []);
   return (
-    <section className="text-white   flex flex-col  items-center mt-32 w-full m-auto">
+    <section className="text-white   flex flex-col  items-center  w-full mx-auto">
       <div>
         <span className="text-white">{notify}</span>
         <ToastContainer position="top-right" />
@@ -93,6 +121,174 @@ const Register = () => {
                 placeholder="الرقم السري"
               />
             </div>
+            <div className="flex flex-col items-start w-1/2">
+              <label className="text-xl font-medium text-white mb-2 ">
+                نوع التحكم
+              </label>
+              <select
+                name="first"
+                id="countries"
+                className="bg-gray-800 p-1 rounded-sm w-full border-2 border-gray-400"
+                value={permission.first}
+                onChange={(e) => handlePermissionChange(e)}>
+                <option value="" selected disabled>
+                  اختر
+                </option>
+                <option value="المحافظة">المحافظة</option>
+                <option value="القسم">القسم</option>
+                <option value="الشياخة">الشياخة</option>
+              </select>
+            </div>
+
+            {permission.first == "الشياخة" ? (
+              <div>
+                <div className="flex flex-col  w-auto p-1">
+                  <label>
+                    المحافظة <span className="text-red-700">*</span>
+                  </label>
+
+                  <select
+                    className="bg-gray-800 p-1 rounded-sm border-2 border-gray-400"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}>
+                    <option value="" selected disabled hidden>
+                      اختر
+                    </option>
+
+                    {data &&
+                      data
+                        ?.filter(
+                          (v, i, a) =>
+                            a.findIndex((v2) => v["city"] === v2["city"]) === i
+                        )
+                        ?.map((x, i) => <option key={i}>{x["city"]}</option>)}
+                  </select>
+                </div>
+                <div className="flex flex-col  w-auto p-1">
+                  <label>
+                    المركز/الحي<span className="text-red-700">*</span>
+                  </label>
+                  <select
+                    disabled={!city}
+                    id="countries"
+                    className="bg-gray-800 p-1 rounded-sm border-2 border-gray-400"
+                    placeholder="ادخل المركز/الحي"
+                    value={place}
+                    onChange={(e) => setPlace(e.target.value)}>
+                    <option value="" selected disabled hidden>
+                      اختر
+                    </option>
+
+                    {city &&
+                      data &&
+                      data
+                        .filter((x, i) => x["city"] == city)
+                        ?.map((y, i) => <option key={i}>{y["place"]}</option>)}
+                  </select>
+                </div>
+                <div className="flex flex-col  w-auto p-1">
+                  <label>
+                    القرية/الشياخة<span className="text-red-700">*</span>
+                  </label>
+                  <select
+                    name="second"
+                    disabled={!place}
+                    id="countries"
+                    className="bg-gray-800 p-1 rounded-sm border-2 border-gray-400"
+                    placeholder="ادخل القرية/الشياخة"
+                    value={permission.second}
+                    onChange={(e) => handlePermissionChange(e)}>
+                    <option value="" selected disabled hidden>
+                      اختر
+                    </option>
+
+                    {place &&
+                      data &&
+                      data
+                        ?.filter((x, i) => x["place"] == place)
+                        ?.map((x, i) =>
+                          x["shiek"].map((y, i) => <option key={i}>{y}</option>)
+                        )}
+                  </select>
+                </div>
+              </div>
+            ) : permission.first == "القسم" ? (
+              <div>
+                <div className="flex flex-col  w-auto p-1">
+                  <label>
+                    المحافظة <span className="text-red-700">*</span>
+                  </label>
+
+                  <select
+                    className="bg-gray-800 p-1 rounded-sm border-2 border-gray-400"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}>
+                    <option value="" selected disabled hidden>
+                      اختر
+                    </option>
+
+                    {data &&
+                      data
+                        ?.filter(
+                          (v, i, a) =>
+                            a.findIndex((v2) => v["city"] === v2["city"]) === i
+                        )
+                        ?.map((x, i) => <option key={i}>{x["city"]}</option>)}
+                  </select>
+                </div>
+                <div className="flex flex-col  w-auto p-1">
+                  <label>
+                    المركز/الحي<span className="text-red-700">*</span>
+                  </label>
+                  <select
+                    name="second"
+                    disabled={!city}
+                    id="countries"
+                    className="bg-gray-800 p-1 rounded-sm border-2 border-gray-400"
+                    placeholder="ادخل المركز/الحي"
+                    value={permission.second}
+                    onChange={(e) => handlePermissionChange(e)}>
+                    <option value="" selected disabled hidden>
+                      اختر
+                    </option>
+
+                    {city &&
+                      data &&
+                      data
+                        .filter((x, i) => x["city"] == city)
+                        ?.map((y, i) => <option key={i}>{y["place"]}</option>)}
+                  </select>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <div className="flex flex-col  w-auto p-1">
+                  <label>
+                    المحافظة <span className="text-red-700">*</span>
+                  </label>
+
+                  <select
+                    disabled={!permission.first}
+                    name="second"
+                    className="bg-gray-800 p-1 rounded-sm border-2 border-gray-400"
+                    value={permission.second}
+                    onChange={(e) => handlePermissionChange(e)}>
+                    <option value="" selected disabled hidden>
+                      اختر
+                    </option>
+
+                    {data &&
+                      data
+                        ?.filter(
+                          (v, i, a) =>
+                            a.findIndex((v2) => v["city"] === v2["city"]) === i
+                        )
+                        ?.map((x, i) => <option key={i}>{x["city"]}</option>)}
+                  </select>
+                </div>
+              </div>
+            )}
+
             <div className="mt-10">
               <button
                 type="submit"

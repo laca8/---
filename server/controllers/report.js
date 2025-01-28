@@ -2,7 +2,13 @@ const Report = require("../models/Report");
 const asyncHandler = require("express-async-handler");
 const ApiError = require("../utils/apiError");
 const addReport = asyncHandler(async (req, res) => {
-  const reports = await Report.find();
+  var start = new Date();
+  start.setHours(0, 0, 0, 0);
+
+  var end = new Date();
+  end.setHours(23, 59, 59, 999);
+  const reports = await Report.find({ createdAt: { $gte: start, $lt: end } });
+
   console.log(reports.length);
   var dt = new Date();
   var year = dt.getFullYear().toString().slice(-2);
@@ -129,14 +135,78 @@ const getReports = asyncHandler(async (req, res) => {
         },
       }
     : {};
+  const k5 = req.query.city
+    ? {
+        city: {
+          $regex: req.query.city,
+          $options: "i",
+        },
+      }
+    : {};
+  const k6 = req.query.place
+    ? {
+        place: {
+          $regex: req.query.place,
+          $options: "i",
+        },
+      }
+    : {};
+  const k7 = req.query.shiek
+    ? {
+        shiek: {
+          $regex: req.query.shiek,
+          $options: "i",
+        },
+      }
+    : {};
+  // console.log("user:", req.user);
 
-  const reports = await Report.find({ ...k1, ...k2, ...k3, ...k4 });
-
-  res.status(200).json({
-    msg: "success",
-    results: reports.length,
-    data: reports,
+  const reports = await Report.find({
+    ...k1,
+    ...k2,
+    ...k3,
+    ...k4,
+    ...k5,
+    ...k6,
+    ...k7,
   });
+  if (req.user.isAdmin == "true") {
+    return res.status(200).json({
+      msg: "success",
+      results: reports.length,
+      data: reports,
+    });
+  } else if (
+    req.user.isAdmin == "false" &&
+    req.user.permission.first == "المحافظة"
+  ) {
+    return res.status(200).json({
+      msg: "success",
+      results: reports?.filter((x) => x.city == req.user.permission.second)
+        .length,
+      data: reports?.filter((x) => x.city == req.user.permission.second),
+    });
+  } else if (
+    req.user.isAdmin == "false" &&
+    req.user.permission.first == "القسم"
+  ) {
+    return res.status(200).json({
+      msg: "success",
+      results: reports?.filter((x) => x.place == req.user.permission.second)
+        .length,
+      data: reports?.filter((x) => x.place == req.user.permission.second),
+    });
+  } else if (
+    req.user.isAdmin == "false" &&
+    req.user.permission.first == "الشياخة"
+  ) {
+    return res.status(200).json({
+      msg: "success",
+      results: reports?.filter((x) => x.shiek == req.user.permission.second)
+        .length,
+      data: reports?.filter((x) => x.shiek == req.user.permission.second),
+    });
+  }
 });
 const updateReport = asyncHandler(async (req, res) => {
   const { id } = req.params;

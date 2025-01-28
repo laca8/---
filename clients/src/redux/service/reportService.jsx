@@ -1,9 +1,12 @@
 import axios from "axios";
 const API_URL = "/api/report";
-const getReports = async (keywords) => {
+const getReports = async (keywords, config) => {
   const response = await axios.get(
-    `${API_URL}?numReport=${keywords.numReport}&name=${keywords?.name}&connPhone=${keywords?.phone}&connName=${keywords?.connName}`
+    `${API_URL}?numReport=${keywords.numReport}&name=${keywords?.name}&connPhone=${keywords?.phone}&connName=${keywords?.connName}&city=${keywords?.city}&place=${keywords?.place}&shiek=${keywords?.shiek}`,
+    config
   );
+  console.log(config);
+
   console.log(keywords);
   console.log(response);
 

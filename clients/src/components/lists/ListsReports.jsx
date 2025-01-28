@@ -22,7 +22,7 @@ const ListsReports = () => {
     }
   }, [error]);
   return (
-    <div className="w-full h-[600px] overflow-y-auto  flex flex-col flex-grow shadow-md sm:rounded-lg font-bold ">
+    <div className="w-full   flex flex-col flex-grow shadow-md sm:rounded-lg font-bold ">
       {loading && <Spinner />}
       <div>
         <p className="text-white">{notify}</p>
@@ -33,51 +33,104 @@ const ListsReports = () => {
           لا يوجد بيانات تتماشي مع عملية البحث حاول مرة أخرى
         </p>
       ) : (
-        <table className="w-full text-sm text-right text-gray-800  mt-10  border-2 border-gray-400 ">
+        <table className="w-full text-sm text-center text-gray-500  mt-10  border-2 border-gray-800 shadow-lg  ">
           <thead className="text-xs text-white   bg-gray-800 ">
             <tr>
               <th scope="col" className="px-6 py-3">
                 رقم البلاغ
               </th>
               <th scope="col" className="px-6 py-3">
+                الاعاقة
+              </th>
+              <th scope="col" className="px-6 py-3">
                 اسم المتصل
               </th>
               <th scope="col" className="px-6 py-3">
-                رقم التليفون
+                اسم متلقي البلاغ
               </th>
               <th scope="col" className="px-6 py-3">
-                تاريخ المكالمة
+                المحافظة
               </th>
               <th scope="col" className="px-6 py-3">
+                المركز
+              </th>
+              <th scope="col" className="px-6 py-3">
+                الشياخة
+              </th>
+              <th scope="col" className="px-6 py-3 text-xl">
+                تم التنفيذ
+              </th>
+              <th scope="col" className="px-6 py-3 text-xl">
+                التاريخ
+              </th>
+              <th scope="col" className="px-6 py-3 text-xl">
                 #
               </th>
             </tr>
           </thead>
-          <tbody className="bg-zinc-800 text-gray-100 ">
-            {reports?.data &&
-              reports?.data?.map((x, i) => (
-                <tr
-                  key={i}
-                  className=" border-b-2 border-black   hover:bg-gray-400 hover:text-black">
-                  <th
-                    scope="row"
-                    className="px-6 py-4 font-medium  whitespace-nowrap ">
+          <tbody className="bg-zinc-100 text-gray-700 w-full ">
+            {reports?.data?.map((x, i) => (
+              <tr key={i} className="border-b-2 border-gray-950">
+                <td scope="row" className="p-2 font-medium  w-auto">
+                  <p className="bg-gray-800 w-auto text-center p-2 rounded-md text-white">
                     {x?.numReport}
-                  </th>
-                  <td className="px-6 py-4">{x?.connName}</td>
-                  <td className="px-6 py-4">{x?.connPhone}</td>
-                  <td className="px-6 py-4">{x?.createdAt}</td>
-                  <td className="px-6 py-4 text-right ">
-                    <button
-                      className="font-medium text-white bg-cyan-700 p-1 m-1"
-                      onClick={() => {
-                        clickToShow(x?._id);
-                      }}>
-                      عرض
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                  </p>
+                </td>
+                <td scope="row" className="p-2 font-medium  w-auto">
+                  <p className="bg-gray-800 w-auto text-center p-2 rounded-md text-white">
+                    {x?.dis}
+                  </p>
+                </td>
+                <td scope="row" className="p-2 font-medium  w-auto">
+                  <p className="bg-gray-800 w-auto text-center p-2 rounded-md text-white">
+                    {x?.connName}
+                  </p>
+                </td>
+                <td scope="row" className="p-2 font-medium  w-auto">
+                  <p className="bg-gray-800 w-auto text-center p-2 rounded-md text-white">
+                    {x?.nameUser}
+                  </p>
+                </td>
+                <td scope="row" className="p-2 font-medium  w-auto">
+                  <p className="bg-gray-800 w-auto text-center p-2 rounded-md text-white">
+                    {x?.city}
+                  </p>
+                </td>
+                <td scope="row" className="p-2 font-medium  w-auto">
+                  <p className="bg-gray-800 w-auto text-center p-2 rounded-md text-white">
+                    {x?.place}
+                  </p>
+                </td>
+                <td scope="row" className="p-2 font-medium  w-auto">
+                  <p className="bg-gray-800 w-auto text-center p-2 rounded-md text-white">
+                    {x?.shiek}
+                  </p>
+                </td>
+                <td className="p-2 w-auto">
+                  {x?.imp == true ? (
+                    <p className="w-8  m-auto text-xl bg-green-800 text-white  text-center ">
+                      ✔
+                    </p>
+                  ) : (
+                    <p className="w-8  m-auto  text-xl bg-red-800 text-white  items-center text-center ">
+                      X
+                    </p>
+                  )}
+                </td>
+                <td scope="row" className="p-2 font-medium  w-auto">
+                  <p className="bg-gray-800 w-auto text-center p-2 rounded-md text-white">
+                    {x?.createdAt?.replace(/T/, " ")?.replace(/\..+/, "")}
+                  </p>
+                </td>
+                <td scope="row" className="p-2 font-medium  w-auto">
+                  <button
+                    className="bg-yellow-600 p-2 rounded-md shadow-md text-white"
+                    onClick={() => clickToShow(x?._id)}>
+                    عرض
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       )}

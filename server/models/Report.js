@@ -51,7 +51,6 @@ const reportSchema = new mongoose.Schema(
     },
     connId: {
       type: String,
-      required: [true, "الرجاء  ادخال الرقم القومي "],
     },
     connJop: {
       type: String,
@@ -82,7 +81,6 @@ const reportSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      required: [true, "الرجاء  ادخال رقم التليفون "],
     },
     city: {
       type: String,
@@ -101,7 +99,6 @@ const reportSchema = new mongoose.Schema(
     },
     id: {
       type: String,
-      required: [true, "الرجاء  ادخال الرقم القومي "],
     },
     dis: {
       type: String,
@@ -118,7 +115,6 @@ const reportSchema = new mongoose.Schema(
     },
     side: {
       type: String,
-      required: [true, "الرجاء  ادخال جهة البلاغ "],
     },
   },
   {

@@ -19,6 +19,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: false,
     },
+    permission: {
+      first: {
+        type: String,
+      },
+      second: {
+        type: String,
+      },
+    },
   },
   {
     timestamps: true,
