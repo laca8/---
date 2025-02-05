@@ -4,18 +4,38 @@ import ReactApexChart from "react-apexcharts";
 
 const Pie = ({ reports }) => {
   const dublicate = {};
-  reports?.data?.forEach(
-    (x) => (dublicate[x.city] = dublicate[x.city] ? dublicate[x.city] + 1 : 1)
-  );
-  console.log(dublicate);
-  const result = Object.keys(dublicate).map((x) => {
+
+  const results = reports?.data?.map((x, i) => {
+    const data = reports?.data?.filter(
+      (y, index) => x.city == y.city && x.imp == y.imp
+    );
     return {
-      city: x,
-      count: dublicate[x],
+      city: data[0]?.city,
+      imp: data[0]?.imp,
+      count: data.length,
     };
   });
+  // reports?.data?.forEach(
+  //   (x) => (dublicate[x.city] = dublicate[x.city] ? dublicate[x.city] + 1 : 1)
+  // );
+  // console.log(dublicate);
+  // const result = Object.keys(dublicate).map((x) => {
+  //   return {
+  //     city: x,
+  //     count: dublicate[x],
+  //   };
+  // });
   const [state, setState] = React.useState({
-    series: result?.map((x) => x.count),
+    series: results
+      ?.filter(
+        (obj, index, self) =>
+          index ===
+          self.findIndex(
+            (t) => t["city"] === obj["city"] && t["imp"] === obj["imp"]
+          )
+      )
+
+      ?.map((x) => x.count),
     options: {
       chart: {
         width: 380,
@@ -28,14 +48,35 @@ const Pie = ({ reports }) => {
           },
         },
       },
-      labels: result?.map((x) => x.city),
-      dataLabels: {
-        dropShadow: {
-          blur: 3,
-          opacity: 1,
+      labels: results
+        ?.filter(
+          (obj, index, self) =>
+            index ===
+            self.findIndex(
+              (t) => t["city"] === obj["city"] && t["imp"] === obj["imp"]
+            )
+        )
+        ?.map(
+          (x) =>
+            `${x.city} ${x.imp ? "=> (تم تنفيذها)" : "=> (لم يتم تنفيذها)"}`
+        ),
+
+      legend: {
+        show: true,
+        showForSingleSeries: false,
+        showForNullSeries: true,
+        showForZeroSeries: true,
+        position: "right",
+        horizontalAlign: "center",
+        fontSize: "18px",
+        fontFamily: "Helvetica, Arial",
+        fontWeight: 400,
+        color: "red",
+        itemMargin: {
+          horizontal: 15,
+          vertical: 0,
         },
       },
-
       responsive: [
         {
           breakpoint: 480,

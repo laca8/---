@@ -2,24 +2,45 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import ReactApexChart from "react-apexcharts";
 const Bar = ({ reports }) => {
+  console.log(reports);
+
+  const results = reports?.data?.map((x, i) => {
+    const data = reports?.data?.filter(
+      (y, index) => x.city == y.city && x.imp == y.imp
+    );
+    return {
+      city: data[0]?.city,
+      imp: data[0]?.imp,
+      count: data.length,
+    };
+  });
+
   const dublicate = {};
   reports?.data?.forEach(
     (x) => (dublicate[x.city] = dublicate[x.city] ? dublicate[x.city] + 1 : 1)
   );
   console.log(dublicate);
-  const result = Object.keys(dublicate).map((x) => {
-    return {
-      city: x,
-      count: dublicate[x],
-    };
-  });
-  console.log(result);
+  // const result = Object.keys(dublicate).map((x) => {
+  //   return {
+  //     city: x,
+  //     count: dublicate[x],
+  //   };
+  // });
+  console.log(results);
   const [state, setState] = React.useState({
     series: [
       {
         name: "البلاغات",
+        data: results
+          ?.filter(
+            (obj, index, self) =>
+              index ===
+              self.findIndex(
+                (t) => t["city"] === obj["city"] && t["imp"] === obj["imp"]
+              )
+          )
 
-        data: result?.map((x) => x.count),
+          ?.map((x) => x.count),
       },
     ],
     options: {
@@ -47,7 +68,18 @@ const Bar = ({ reports }) => {
         show: false,
       },
       xaxis: {
-        categories: result?.map((x) => x.city),
+        categories: results
+          ?.filter(
+            (obj, index, self) =>
+              index ===
+              self.findIndex(
+                (t) => t["city"] === obj["city"] && t["imp"] === obj["imp"]
+              )
+          )
+          ?.map(
+            (x) =>
+              `${x.city} ${x.imp ? "=> (تم تنفيذها)" : "=> (لم يتم تنفيذها)"}`
+          ),
 
         labels: {
           rotate: -90,
@@ -64,7 +96,7 @@ const Bar = ({ reports }) => {
         text: "أعداد البلاغات",
         align: "left",
         style: {
-          fontSize: "14px",
+          fontSize: "24px",
           colors: "#000",
         },
       },
